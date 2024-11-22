@@ -17,6 +17,7 @@ struct User
 };
 
 void creaet(struct User *u,int id){
+    int month, day, year;
 
     int cp;                             //choix priority
     u->id=id;
@@ -28,13 +29,28 @@ void creaet(struct User *u,int id){
     scanf("%s",u->description);
     
 
+   while (1)
+   {
+     printf("Enter the date (MM-DD-YYYY): ");
+    scanf("%10s", u->Due_date); 
+
+    if (sscanf(u->Due_date, "%2d-%2d-%4d", &month, &day, &year) != 3 || 
+        month < 1 || month > 12 || 
+        day < 1 || day > 31 || 
+        year < 2024 || year > 2040) {
+        printf("Invalid format. Please enter the date in MM-DD-YYYY format.\n");
+
+    } else {
+       // printf("%s\n", u->Due_date);
+        break;
+    }
+   }
    
-    printf("entrer la date (MM-DD-YYYY) : ");
-    scanf("%s",u->Due_date);
+  
    
    
     while (1) {
-        printf("Entrer la the priorite (1. high, 2. low): ");
+        printf("Entrer la  priorite (1. high, 2. low): ");
         scanf("%s", u->priority);
 
         // Verifiez si la priorite saisie est « low » ou « high »
@@ -60,8 +76,7 @@ void display(struct User u){
     }else printf("accun");
 }
 void update(struct User *u,int field,char nv[]){
-    printf(" Modifier une Tache : ");
-    printf("1.description\n2.la date d'echeance\n3.la priorite\n0.Exist");
+  
     switch (field)
     {
     case 0:
@@ -147,7 +162,7 @@ int main(){
        {                 
                 printf("<< Saisissez le choix que vous souhaitez modifier>>");
                 printf("\n1.description\n2.la date d'echeance\n3.la priorite.");
-                scanf("%s",&field);
+                scanf("%d",&field);
                 printf("Entrer la nouvelle valeur : ");
                 scanf("%s",nv);
 
@@ -156,6 +171,7 @@ int main(){
 
        }
             }
+        
         break;
         case 4:
         {
