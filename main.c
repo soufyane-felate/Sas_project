@@ -3,6 +3,7 @@
 #include<string.h>
 
 
+
 #define MAX 100
 
 
@@ -16,7 +17,8 @@ struct User
 };
 
 void creaet(struct User *u,int id){
-    int cp;//choix priority
+
+    int cp;                             //choix priority
     u->id=id;
     printf("\n______________________________\n");
     printf("entrer le titre : ");
@@ -25,23 +27,36 @@ void creaet(struct User *u,int id){
     printf("entrer la description : ");
     scanf("%s",u->description);
     
-    printf("entrer la date (MM/DD/YYYY) : ");
+
+   
+    printf("entrer la date (MM-DD-YYYY) : ");
     scanf("%s",u->Due_date);
+   
+   
+    while (1) {
+        printf("Entrer la the priorite (1. high, 2. low): ");
+        scanf("%s", u->priority);
+
+        // Verifiez si la priorite saisie est « low » ou « high »
+        if (strcmp(u->priority, "high") == 0 || strcmp(u->priority, "low") == 0) {
+            break;                   //Entree valide, quitter la boucle
+        } else {
+            printf("Invalide entrer, veuillez entrer'high' ou 'low'.\n");
+        }
+    }
+   // scanf("%s",u->priority);
     
-    printf("entrer la priorité (1.high, 2.low): ");
-    
-    scanf("%s",u->priority);
-    
-    printf("\n______________________________\n");
+    printf("\n________________________________________________________\n");
 }
 
 void display(struct User u){
     if (u.id!=0)
     {
-    printf("Votre information :\n ");
-    printf("ID : %d\ntitre : %s\ndescription : %s\ndate d'echeance : %s\npriorité : %s",
+    printf("\nVotre information :\n ");
+    printf("ID : %d\ntitre : %s\ndescription : %s\ndate d'echeance : %s\npriorite : %s",
     u.id,u.titre,u.description,u.Due_date,u.priority
   );
+    printf("\n________________________________________________________\n");
     }else printf("accun");
 }
 void update(struct User *u,int field,char nv[]){
@@ -75,21 +90,29 @@ void delete(struct User *u){
     printf("supprimer le succes");
 }
 
-void filtered(struct User *u){
-
+void filtered(struct User u[],char fp[]){
+   if (strcmp(u->priority,fp)==0)
+   {
+     printf("\nVotre information :\n ");
+    printf("ID : %d\ntitre : %s\ndescription : %s\ndate d'echeance : %s\npriorite : %s\n",
+    u->id,u->titre,u->description,u->Due_date,u->priority);
+   }
+   else printf("non trouver ...\n");
+   
 }
 
 
 int main(){
     struct User u[MAX]={0};
     int id=0;
-    int choix;
+    int choix,id_deleted;
+    char fp[100];
 
     do
     {
     printf("\n<<  Menu  >>\n1.Ajouter\n2.afficher\n3.modifier\n4.suprimer\n5.filtrer\n0.Exist\n");
     scanf("%d",&choix);
-    printf("\n___________________________________________________________________________\n");
+    printf("\n________________________________________________________\n");
         switch (choix)
         {
         case 1:
@@ -134,8 +157,39 @@ int main(){
        }
             }
         break;
+        case 4:
+        {
+            printf("Entrer id que vous voulez suprimer : ");
+            scanf("%d",&id_deleted);
+            if (id_deleted>1||id>id_deleted)
+            {
+                delete(&u[id_deleted-1]);
+            }else{
+                printf("Invalid ID");
+            }
+            
+
+
+            break;
+        }
+        case 5:
+          {
+            printf("entrer le mot cle : ");
+            scanf("%s",&fp);
+
+            for (int i = 0; i < id; i++)
+            {
+                filtered(&u[i],fp);
+             
+            }
+        break;
+        
+        
+
+        }
         
         default:
+        printf("Choix invalide, veuillez reessayer...");                                 //message si votre choix est incorrect
             break;
         }
     } while (choix!=0);
